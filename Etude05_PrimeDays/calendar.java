@@ -29,11 +29,11 @@ public class calendar{
         if(number ==0) return false;
         if(number == 1) return false;
         if(number == 2 || number ==3) return true;
-        int i = 2;
+        int i = 3;
         if(number % 2==0) return false;
         while(i*i <= number){
             if((number % i) ==0) return false;
-            i++;
+            i+=2;
         }
         return true;
     }
