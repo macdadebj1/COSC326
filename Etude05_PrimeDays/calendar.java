@@ -1,6 +1,3 @@
-import java.util.Scanner;
-import java.lang.Math;
-
 //Is prime if day of month is prime, month is prime, and day of year is prime...
 //output: <number of day>: <number of month> <day of month>
 
