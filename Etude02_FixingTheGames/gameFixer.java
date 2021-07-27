@@ -88,7 +88,7 @@ public class gameFixer {
                             //System.out.println("Set number of players equal to players on the line!");
                         } else if(numberOfPlayers != playersOnThisLine){
                             System.out.println("Bad Format");
-                            break;
+                            System.exit(1);
 
                         }
                     }
