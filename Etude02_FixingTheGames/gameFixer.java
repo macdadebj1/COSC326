@@ -23,7 +23,7 @@ public class gameFixer {
 
     public static void main(String[] args){
         initialSetup(args);
-        gameLoop(0,gameArray,hasHadBye);
+        gameLoop(0,gameArray);
         System.out.println();
         shiftDown(0,2);
         shiftDown(2, 1);
