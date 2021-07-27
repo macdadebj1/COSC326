@@ -16,18 +16,49 @@ public class gameFixer {
 
     private static int numberOfPlayers = 0;
     private static int numberOfGames = 0;
-    private static int[][] collapsedGameArray;
-    private static int[][] expandedGameArray;
+    //private static int[][] collapsedGameArray;
+    private static int[][] gameArray;
     private static boolean[] hasHadBye;
 
 
     public static void main(String[] args){
         initialSetup(args);
+        gameLoop(0,gameArray,hasHadBye);
+        System.out.println();
+        shiftDown(0,2);
+        shiftDown(2, 1);
+
 
     }
 
-    private static void shiftDown(int indexToShift){
+    private static void gameLoop(int gameIndex, int[][] localGame){
+        int[][] localGameArray = localGame;
+        //boolean[] localHasHadBye = localBye;
+        boolean[] localScores = new boolean[numberOfPlayers];
+        //int repeatedScoreIndex
+        for(int i = 0; i < localGameArray[gameIndex].length; i++){
+            if(!hasHadBye[i]){ //if the current player we are on hasn't had a bye.
+                int playerScore = localGameArray[gameIndex][i]; //Store the score of the current player we are on.
+                if(!(localScores[playerScore])){ // if we have not seen a player with that score in this game.
+                    localScores[playerScore] = true; // we have now seen a player with this score in this game.
+                }else{ //if we have already seen a player with this score...
+                    
+                }
+            }
+        }
+    }
 
+    private static void shiftDown(int playerToShift, int gametoShiftTo){
+        if(!(gametoShiftTo > numberOfGames)){
+            for(int i = numberOfGames-2; i>= gametoShiftTo; i--){
+                gameArray[i+1][playerToShift] = gameArray[i][playerToShift];
+                if(i == gametoShiftTo){
+                    gameArray[i][playerToShift] = 0;
+                }
+                System.out.println(i);
+            }
+            printArray(gameArray);
+        }
 
     }
 
@@ -65,20 +96,23 @@ public class gameFixer {
                     System.out.println("Number of players (columns): " + numberOfPlayers);
 
                     numberOfGames = numberOfGames + 1;
-                    collapsedGameArray = new int[numberOfGames-1][numberOfPlayers];
-                    expandedGameArray = new int[numberOfGames][numberOfPlayers];
+                    //collapsedGameArray = new int[numberOfGames-1][numberOfPlayers];
+                    gameArray = new int[numberOfGames][numberOfPlayers];
                     hasHadBye = new boolean[numberOfPlayers];
+                    for(int i = 0; i < hasHadBye.length;i++){
+                        hasHadBye[i] = false;
+                    }
 
                     scan = new Scanner(file);
 
-                    for(int i = 0; i < numberOfPlayers; i++){
-                        for(int j = 0; j < numberOfGames; j++){
+                    for(int i = 0; i < numberOfGames; i++){
+                        for(int j = 0; j < numberOfPlayers; j++){
                             if(scan.hasNext()) {
-                                collapsedGameArray[i][j] = Integer.parseInt(scan.next());
+                                gameArray[i][j] = Integer.parseInt(scan.next());
                             }
                         }
                     }
-                   printArray(collapsedGameArray);
+                   printArray(gameArray);
 
                 }else{
                     System.out.println("file object is null in main! Please supply a valid filename!");
