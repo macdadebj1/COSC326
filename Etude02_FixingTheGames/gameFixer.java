@@ -35,17 +35,30 @@ public class gameFixer {
         int[][] localGameArray = localGame;
         //boolean[] localHasHadBye = localBye;
         boolean[] localScores = new boolean[numberOfPlayers];
+        int indexOne, indexTwo;
         //int repeatedScoreIndex
         for(int i = 0; i < localGameArray[gameIndex].length; i++){
             if(!hasHadBye[i]){ //if the current player we are on hasn't had a bye.
                 int playerScore = localGameArray[gameIndex][i]; //Store the score of the current player we are on.
                 if(!(localScores[playerScore])){ // if we have not seen a player with that score in this game.
                     localScores[playerScore] = true; // we have now seen a player with this score in this game.
+                    System.out.println("We have not seen a player with this score, in this game!");
                 }else{ //if we have already seen a player with this score...
-                    
+                    indexTwo = i;
+                    System.out.println("We have already seen a player with this score, in this game!");
+                    for(int j = 0; j < localGameArray[gameIndex].length;j++){
+                        if(localGameArray[gameIndex][j] == indexTwo){
+                            indexOne = j; //Bad way of getting indices of both players with the same score...
+                            break;
+                        }
+                        
+                    }
+                    break;
                 }
             }
         }
+        gameLoop(gameIndex++, localGame);
+        
     }
 
     private static void shiftDown(int playerToShift, int gametoShiftTo){
