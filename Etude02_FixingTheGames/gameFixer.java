@@ -23,33 +23,38 @@ public class gameFixer {
 
     public static void main(String[] args){
         initialSetup(args);
-        gameLoop(0,gameArray);
+        //printArray(gameArray);
+        gameLoop(0,gameArray,-1);
         System.out.println();
-        shiftDown(0,2);
-        shiftDown(2, 1);
+        //shiftDown(0,2);
+        //shiftDown(2, 1);
 
 
     }
 
-    private static void gameLoop(int gameIndex, int[][] localGame){
+    private static void gameLoop(int gameIndex, int[][] localGame,int playerIndex){
         int[][] localGameArray = localGame;
         //boolean[] localHasHadBye = localBye;
         boolean[] localScores = new boolean[numberOfPlayers];
-        int indexOne, indexTwo;
+        int indexOne = -1, indexTwo = -1;
         //int repeatedScoreIndex
+        if(playerIndex > -1)
+        shiftDown(playerIndex, gameIndex);
         for(int i = 0; i < localGameArray[gameIndex].length; i++){
             if(!hasHadBye[i]){ //if the current player we are on hasn't had a bye.
                 int playerScore = localGameArray[gameIndex][i]; //Store the score of the current player we are on.
                 if(!(localScores[playerScore])){ // if we have not seen a player with that score in this game.
                     localScores[playerScore] = true; // we have now seen a player with this score in this game.
-                    System.out.println("We have not seen a player with this score, in this game!");
+                    System.out.println("We have not seen a player with this score, in this game! "+playerScore);
                 }else{ //if we have already seen a player with this score...
                     indexTwo = i;
-                    System.out.println("We have already seen a player with this score, in this game!");
+                    System.out.println("We have already seen a player with this score, in this game! " + playerScore);
                     for(int j = 0; j < localGameArray[gameIndex].length;j++){
                         if(localGameArray[gameIndex][j] == indexTwo){
                             indexOne = j; //Bad way of getting indices of both players with the same score...
+                            //System.out.println(indexOne+ " ; "+indexTwo);
                             break;
+                            
                         }
                         
                     }
@@ -57,7 +62,14 @@ public class gameFixer {
                 }
             }
         }
-        gameLoop(gameIndex++, localGame);
+        if(gameIndex < numberOfGames){
+            if(indexOne > -1 && indexTwo > -1){
+            gameLoop(gameIndex++, localGameArray,indexOne);
+            gameLoop(gameIndex++, localGameArray, indexTwo);
+            }
+        } else{
+            printArray(localGameArray);
+        }
         
     }
 
@@ -91,7 +103,7 @@ public class gameFixer {
                         String line = scan.nextLine();
                         int playersOnThisLine = 0;
                         lineReader = new Scanner(line);
-                        System.out.println(line);
+                        //System.out.println(line);
                         while(lineReader.hasNext()){
                             playersOnThisLine++;
                             lineReader.next();
