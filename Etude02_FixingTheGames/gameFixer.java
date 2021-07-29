@@ -22,9 +22,9 @@ public class gameFixer {
 
 
     public static void main(String[] args){
-        initialSetup(args);
-        //printArray(gameArray);
         gameFixer f = new gameFixer();
+        f.initialSetup(args);
+        //printArray(gameArray);
         f.gameLoop(0,gameArray,-1, hasHadBye);
         System.out.println();
         //shiftDown(0,2);
@@ -80,7 +80,7 @@ public class gameFixer {
         
     }
 
-    private static void shiftDown(int playerToShift, int gametoShiftTo,int[][] localArray){
+    private void shiftDown(int playerToShift, int gametoShiftTo,int[][] localArray){
         if(gametoShiftTo < numberOfGames){
             for(int i = numberOfGames-2; i>= gametoShiftTo; i--){
                 localArray[i+1][playerToShift] = localArray[i][playerToShift];
@@ -94,7 +94,7 @@ public class gameFixer {
 
     }
 
-    private static void initialSetup(String[] args){
+    private void initialSetup(String[] args){
         String fileName;
         Scanner scan, lineReader;
         File file;
@@ -162,7 +162,7 @@ public class gameFixer {
 
     }
 
-    private static void printArray(int[][] array){
+    private void printArray(int[][] array){
         for(int i = 0; i < array.length; i++){
             for(int j = 0; j < array[i].length;j++){
                 int itemAt = array[i][j];
