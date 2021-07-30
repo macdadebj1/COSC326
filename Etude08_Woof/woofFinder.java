@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class woofFinder{
     private static boolean enableDebugging = false;
+    private static boolean inwoof = false;
     public static void main(String args[]){
         if(args.length > 0){
             if(args[0].charAt(0) == 'd' || args[0].charAt(0) == 'D') {
@@ -23,10 +24,14 @@ public class woofFinder{
      *     KNqKEEsrCrsEAKqssCsq
      * */
     private static boolean woof(String str){
-        boolean inwoof = false;
+
         if(validateWoof(str.charAt(0))) {
             if(enableDebugging) System.out.println("Single char: " +str);
             if(str.length() == 1) return true;
+            else if(str.length() >1 && !inwoof) {
+                if(validateWoof(str.charAt(0)) && validateWoof(str.charAt(1)))// return false;
+                return woof(str.substring(1));
+            }
             //else if(validateWoof(str.charAt(0)) && validateWoof(str.charAt(1))) return false;
             else if (inwoof) {
                 if(enableDebugging) System.out.println("In woof: "+inwoof);
