@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class woofFinder{
     private static boolean enableDebugging = false;
-    private static boolean inwoof = false;
+    private static int expectingWoof = 0; //In the middle of changing over from a boolean inwoof to an integer expecting woof
     public static void main(String args[]){
         if(args.length > 0){
             if(args[0].charAt(0) == 'd' || args[0].charAt(0) == 'D') {
@@ -43,7 +43,7 @@ public class woofFinder{
             return woof(str.substring(1));
         }else if(validateLeader(str.charAt(0))){
             if(enableDebugging) System.out.println("Leader + str:" + str);
-            inwoof = true;
+            expectingWoof++;
             return woof(str.substring(1)) && woof(str.substring(2));
             //return true;
         }else{
