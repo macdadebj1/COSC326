@@ -6,6 +6,7 @@ import java.util.Scanner;
  * to do with expectingWoof being initialized at 1;
  * e.g. "Nss" is not a woof but program says it is... :(
  * 
+ * !!! BUG SHOULD BE FIXED !!!
  */
 
 public class woofFinder{
