@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class woofFinder{
     private static boolean enableDebugging = false;
+    private static boolean start = true;
     private static int expectingWoof = 1;
     public static void main(String args[]){
         if(args.length > 0){
@@ -25,6 +26,7 @@ public class woofFinder{
             if(woof(line)) System.out.println("woof");
             else System.out.println("not woof");
             expectingWoof=1;
+            start = true;
         }
 
     }
@@ -37,7 +39,7 @@ public class woofFinder{
         
         if(expectingWoof > 0){
         if(validateWoof(str.charAt(0))) {
-            
+            start = false;
             if(enableDebugging) System.out.println("Single char: " +str);
             if(str.length() == 1 && expectingWoof > 0) {
                 expectingWoof-=1;
@@ -56,11 +58,14 @@ public class woofFinder{
             }
         }else if(str.charAt(0) == 'N' && str.length() > 1){
             if(enableDebugging) System.out.println("N + substring:" +str.substring(1));
-            expectingWoof+=1;
+            //if(!start) expectingWoof+=1;
+            start = false;
             return woof(str.substring(1));
         }else if(validateLeader(str.charAt(0))){
             if(enableDebugging) System.out.println("Leader + str:" + str);
-            expectingWoof+=2;
+            if(!start) expectingWoof+=1;
+            else if (start) expectingWoof +=1;
+            start = false;
             return woof(str.substring(1));
             //return true;
         }else{
