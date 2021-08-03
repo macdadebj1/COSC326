@@ -109,7 +109,7 @@ public class gameFixer {
     }
 
     private void initialSetup(String[] args){
-        String fileName;
+        //String fileName;
         Scanner scan, lineReader;
         File file;
         //Pattern pattern = Pattern.compile("[0-9]");
