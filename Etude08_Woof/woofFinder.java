@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class woofFinder{
     private static boolean enableDebugging = false;
-    private static int expectingWoof = 0; //In the middle of changing over from a boolean inwoof to an integer expecting woof
+    private static int expectingWoof = 1; //In the middle of changing over from a boolean inwoof to an integer expecting woof
     public static void main(String args[]){
         if(args.length > 0){
             if(args[0].charAt(0) == 'd' || args[0].charAt(0) == 'D') {
@@ -16,6 +16,7 @@ public class woofFinder{
             String line = scan.nextLine();
             if(woof(line)) System.out.println("woof");
             else System.out.println("not woof");
+            expectingWoof=1;
         }
 
     }
@@ -24,31 +25,41 @@ public class woofFinder{
      *     KNqKEEsrCrsEAKqssCsq
      * */
     private static boolean woof(String str){
-
+        if(enableDebugging) System.out.println("Expecting "+expectingWoof+" woofs!");
+        
+        if(expectingWoof > 0){
         if(validateWoof(str.charAt(0))) {
+            
             if(enableDebugging) System.out.println("Single char: " +str);
-            if(str.length() == 1) return true;
-            else if(str.length() >1 && !inwoof) {
-                if(validateWoof(str.charAt(0)) && validateWoof(str.charAt(1)))// return false;
-                return woof(str.substring(1));
+            if(str.length() == 1 && expectingWoof > 0) {
+                expectingWoof-=1;
+                return true;
+            }
+            else if(str.length() >1 && expectingWoof == 0) {
+                return false;
+                //if(validateWoof(str.charAt(0)) && validateWoof(str.charAt(1)))// return false;
+                //return woof(str.substring(1));
             }
             //else if(validateWoof(str.charAt(0)) && validateWoof(str.charAt(1))) return false;
-            else if (inwoof) {
-                if(enableDebugging) System.out.println("In woof: "+inwoof);
-                inwoof = false;
+            else if (expectingWoof > 0) {
+                expectingWoof -=1;
+                
                 return woof(str.substring(1));
             }
         }else if(str.charAt(0) == 'N' && str.length() > 1){
             if(enableDebugging) System.out.println("N --> substring:" +str.substring(1));
+            expectingWoof+=1;
             return woof(str.substring(1));
         }else if(validateLeader(str.charAt(0))){
             if(enableDebugging) System.out.println("Leader + str:" + str);
-            expectingWoof++;
-            return woof(str.substring(1)) && woof(str.substring(2));
+            expectingWoof+=2;
+            return woof(str.substring(1));
             //return true;
         }else{
             if(enableDebugging) System.out.println("Fell through if statements in woof!");
             validateWoof(str.charAt(0));
+        }
+        return false;
         }
         return false;
     }
