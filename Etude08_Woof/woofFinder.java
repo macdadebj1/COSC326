@@ -1,8 +1,16 @@
 import java.util.Scanner;
 
+
+/**
+ * STILL HAS A BUG where if there is still a woof after main woof
+ * to do with expectingWoof being initialized at 1;
+ * e.g. "Nss" is not a woof but program says it is... :(
+ * 
+ */
+
 public class woofFinder{
     private static boolean enableDebugging = false;
-    private static int expectingWoof = 1; //In the middle of changing over from a boolean inwoof to an integer expecting woof
+    private static int expectingWoof = 1;
     public static void main(String args[]){
         if(args.length > 0){
             if(args[0].charAt(0) == 'd' || args[0].charAt(0) == 'D') {
@@ -35,7 +43,7 @@ public class woofFinder{
                 expectingWoof-=1;
                 return true;
             }
-            else if(str.length() >1 && expectingWoof == 0) {
+            else if(str.length() >1 && expectingWoof == 0) { //expectingWoof == 0 is unnecessary..! already checking in if statement!
                 return false;
                 //if(validateWoof(str.charAt(0)) && validateWoof(str.charAt(1)))// return false;
                 //return woof(str.substring(1));
@@ -47,7 +55,7 @@ public class woofFinder{
                 return woof(str.substring(1));
             }
         }else if(str.charAt(0) == 'N' && str.length() > 1){
-            if(enableDebugging) System.out.println("N --> substring:" +str.substring(1));
+            if(enableDebugging) System.out.println("N + substring:" +str.substring(1));
             expectingWoof+=1;
             return woof(str.substring(1));
         }else if(validateLeader(str.charAt(0))){
