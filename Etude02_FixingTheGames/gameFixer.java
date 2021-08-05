@@ -19,13 +19,20 @@ public class gameFixer {
     //private static int[][] collapsedGameArray;
     private static int[][] gameArray;
     private static boolean[] hasHadBye;
+    private static boolean debug = false;
 
 
     public static void main(String[] args){
-       // gameFixer f = new gameFixer();
-        initialSetup(args);
+        if(args.length >= 2){
+            if(args[1].charAt(0) == 'd' || args[1].charAt(0) =='D'){
+                debug = true;
+                System.out.println("Debugging enabled!");
+            }
+        }
+        initialSetup(args[0]);
         //printArray(gameArray);
         gameLoop(0,gameArray,-1, hasHadBye);
+        //newGameLoop();
         System.out.println();
         //shiftDown(0,2);
         //shiftDown(2, 1);
@@ -33,10 +40,28 @@ public class gameFixer {
 
     }
 
-    private static void gameLoop(int gameIndex, int[][] localGame,int playerIndex,boolean[] localBye){
-        int[][] localGameArray = localGame;
-        boolean[] localHasHadBye = localBye;
+    private static void newGameLoop(){
+        int[] currentGameScores = new int[numberOfPlayers];
+        for(int i = 0; i < numberOfGames; i++){
+            for(int j = 0; j <numberOfPlayers; j++){
+                int playerScore = gameArray[i][j];
+                if(currentGameScores[playerScore]==0) {
+                    currentGameScores[playerScore] = j;
+                    if (debug) System.out.println("We haven't seen this score in this game before! "+currentGameScores[playerScore]);
+                }else if(currentGameScores[playerScore] != 0){
+                    if (debug) System.out.println("We have seen this score in this game before! "+playerScore + " at index: "+currentGameScores[playerScore]);
+                }
+            }
+        }
+
+    }
+
+    private static void gameLoop(int gameI, int[][] localGame,int playerI,boolean[] localBye){
+        int[][] localGameArray = localGame.clone();
+        boolean[] localHasHadBye = localBye.clone();
         boolean[] localScores = new boolean[numberOfPlayers];
+        int gameIndex = gameI;
+        int playerIndex = playerI;
         int indexOne = -1, indexTwo = -1;
         int byecount =0;
         //int repeatedScoreIndex
@@ -55,7 +80,7 @@ public class gameFixer {
             shiftDown(playerIndex, gameIndex-1,localGameArray);
             localHasHadBye[playerIndex] =true;
         }
-        for(int i = 0; i < localGameArray[gameIndex].length; i++){
+        for(int i = 0; i < localGameArray[gameIndex].length-1; i++){
             if(true/*!localHasHadBye[i]*/){ //if the current player we are on hasn't had a bye.
                 int playerScore = localGameArray[gameIndex][i]; //Store the score of the current player we are on.
                 System.out.println("PlayerScore: "+playerScore+" At game: "+gameIndex+" at player: "+i);
@@ -108,15 +133,15 @@ public class gameFixer {
 
     }
 
-    private static void initialSetup(String[] args){
+    private static void initialSetup(String filename){
         //String fileName;
         Scanner scan, lineReader;
         File file;
         //Pattern pattern = Pattern.compile("[0-9]");
 
-        if(args[0] != null) {
+        if(filename != null) {
             try {
-                file = new File(args[0]);
+                file = new File(filename);
                 if(file.exists() && file.canRead()) {
                     scan = new Scanner(file);
                     while(scan.hasNextLine()){
