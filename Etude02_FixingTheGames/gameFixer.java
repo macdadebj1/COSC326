@@ -22,10 +22,10 @@ public class gameFixer {
 
 
     public static void main(String[] args){
-        gameFixer f = new gameFixer();
-        f.initialSetup(args);
+       // gameFixer f = new gameFixer();
+        initialSetup(args);
         //printArray(gameArray);
-        f.gameLoop(0,gameArray,-1, hasHadBye);
+        gameLoop(0,gameArray,-1, hasHadBye);
         System.out.println();
         //shiftDown(0,2);
         //shiftDown(2, 1);
@@ -33,7 +33,7 @@ public class gameFixer {
 
     }
 
-    private void gameLoop(int gameIndex, int[][] localGame,int playerIndex,boolean[] localBye){
+    private static void gameLoop(int gameIndex, int[][] localGame,int playerIndex,boolean[] localBye){
         int[][] localGameArray = localGame;
         boolean[] localHasHadBye = localBye;
         boolean[] localScores = new boolean[numberOfPlayers];
@@ -82,8 +82,8 @@ public class gameFixer {
         if(gameIndex < numberOfGames){
             if(indexOne > -1 && indexTwo > -1){
                 System.out.println("Index one: " + indexOne + ". Index two: "+indexTwo);
-                if(!localHasHadBye[indexOne]) new gameFixer().gameLoop(gameIndex+1, localGameArray,indexOne,localHasHadBye);
-                if(!localHasHadBye[indexTwo]) new gameFixer().gameLoop(gameIndex+1, localGameArray, indexTwo,localHasHadBye);
+                if(!localHasHadBye[indexOne]) gameLoop(gameIndex+1, localGameArray,indexOne,localHasHadBye);
+                if(!localHasHadBye[indexTwo]) gameLoop(gameIndex+1, localGameArray, indexTwo,localHasHadBye);
             }
         } else{
             System.out.println("Can't Go further... this is what I got:");
@@ -92,7 +92,7 @@ public class gameFixer {
         
     }
 
-    private void shiftDown(int playerToShift, int gametoShiftTo,int[][] localArray){
+    private static void shiftDown(int playerToShift, int gametoShiftTo,int[][] localArray){
 
         if(gametoShiftTo < numberOfGames){
             System.out.println("Shifting down player: " +playerToShift+", in game: "+gametoShiftTo);
@@ -108,7 +108,7 @@ public class gameFixer {
 
     }
 
-    private void initialSetup(String[] args){
+    private static void initialSetup(String[] args){
         //String fileName;
         Scanner scan, lineReader;
         File file;
@@ -176,7 +176,7 @@ public class gameFixer {
 
     }
 
-    private void printArray(int[][] array){
+    private static void printArray(int[][] array){
         for(int i = 0; i < array.length; i++){
             for(int j = 0; j < array[i].length;j++){
                 int itemAt = array[i][j];
