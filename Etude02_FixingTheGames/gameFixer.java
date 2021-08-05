@@ -40,7 +40,7 @@ public class gameFixer {
 
     }
 
-    private static void newGameLoop(){
+    /*private static void newGameLoop(){
         int[] currentGameScores = new int[numberOfPlayers];
         for(int i = 0; i < numberOfGames; i++){
             for(int j = 0; j <numberOfPlayers; j++){
@@ -54,7 +54,7 @@ public class gameFixer {
             }
         }
 
-    }
+    }*/
 
     private static void gameLoop(int gameI, int[][] localGame,int playerI,boolean[] localBye){
         int[][] localGameArray = localGame;
@@ -80,7 +80,7 @@ public class gameFixer {
             shiftDown(playerIndex, gameIndex-1,localGameArray);
             localHasHadBye[playerIndex] =true;
         }
-        for(int i = 0; i < localGameArray[gameIndex].length-1; i++){
+        for(int i = 0; i < localGameArray[gameIndex].length; i++){
             if(true/*!localHasHadBye[i]*/){ //if the current player we are on hasn't had a bye.
                 int playerScore = localGameArray[gameIndex][i]; //Store the score of the current player we are on.
                 if(debug) System.out.println("PlayerScore: "+playerScore+" At game: "+gameIndex+" at player: "+i);
@@ -104,6 +104,7 @@ public class gameFixer {
                 }
             }
         }
+        //printArray(localGameArray);
         if(gameIndex < numberOfGames){
             if(indexOne > -1 && indexTwo > -1){
                 if(debug) System.out.println("Index one: " + indexOne + ". Index two: "+indexTwo);
