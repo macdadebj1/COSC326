@@ -57,20 +57,20 @@ public class gameFixer {
     }
 
     private static void gameLoop(int gameI, int[][] localGame,int playerI,boolean[] localBye){
-        int[][] localGameArray = localGame.clone();
-        boolean[] localHasHadBye = localBye.clone();
+        int[][] localGameArray = localGame;
+        boolean[] localHasHadBye = localBye;
         boolean[] localScores = new boolean[numberOfPlayers];
         int gameIndex = gameI;
         int playerIndex = playerI;
         int indexOne = -1, indexTwo = -1;
         int byecount =0;
         //int repeatedScoreIndex
-        System.out.println("Game index: " +gameIndex);
+        if(debug) System.out.println("Game index: " +gameIndex);
 
         for(int i = 0; i < numberOfPlayers; i++){
             if(localHasHadBye[i] == true) byecount++;
-            else if(byecount == numberOfPlayers){
-                System.out.println("This is as far as I can get! Everyone has had a bye!");
+            if(byecount == numberOfPlayers){
+                System.out.println("======== This is as far as I can get! Everyone has had a bye! ==========");
                 printArray(localGameArray);
                 return;
             }
@@ -83,15 +83,15 @@ public class gameFixer {
         for(int i = 0; i < localGameArray[gameIndex].length-1; i++){
             if(true/*!localHasHadBye[i]*/){ //if the current player we are on hasn't had a bye.
                 int playerScore = localGameArray[gameIndex][i]; //Store the score of the current player we are on.
-                System.out.println("PlayerScore: "+playerScore+" At game: "+gameIndex+" at player: "+i);
+                if(debug) System.out.println("PlayerScore: "+playerScore+" At game: "+gameIndex+" at player: "+i);
                 if(!(localScores[playerScore])){ // if we have not seen a player with that score in this game.
                     localScores[playerScore] = true; // we have now seen a player with this score in this game.
-                    System.out.println("We have not seen a player with this score, in this game! "+playerScore);
+                    if(debug) System.out.println("We have not seen a player with this score, in this game! "+playerScore);
                 }else if(localScores[playerScore]){ //if we have already seen a player with this score...
                     indexTwo = i;
-                    System.out.println("We have already seen a player with this score, in this game! " + playerScore);
+                    if(debug) System.out.println("We have already seen a player with this score, in this game! " + playerScore);
                     for(int j = 0; j < localGameArray[gameIndex].length;j++){
-                        System.out.println(localGameArray[gameIndex][j]+" score at J, indextwo = " +indexTwo);
+                        if(debug) System.out.println(localGameArray[gameIndex][j]+" score at J, indextwo = " +indexTwo);
                         if(localGameArray[gameIndex][j] == localGameArray[gameIndex][indexTwo]){
                             indexOne = j; //Bad way of getting indices of both players with the same score...
                             //System.out.println(indexOne+ " ; "+indexTwo);
@@ -106,12 +106,18 @@ public class gameFixer {
         }
         if(gameIndex < numberOfGames){
             if(indexOne > -1 && indexTwo > -1){
-                System.out.println("Index one: " + indexOne + ". Index two: "+indexTwo);
-                if(!localHasHadBye[indexOne]) gameLoop(gameIndex+1, localGameArray,indexOne,localHasHadBye);
-                if(!localHasHadBye[indexTwo]) gameLoop(gameIndex+1, localGameArray, indexTwo,localHasHadBye);
+                if(debug) System.out.println("Index one: " + indexOne + ". Index two: "+indexTwo);
+                if(!localHasHadBye[indexOne]) {
+                    if(debug) System.out.println("Branching to index 1!");
+                    gameLoop(gameIndex + 1, cloneGame(localGameArray), indexOne, cloneBoolArray(localHasHadBye));
+                }
+                if(!localHasHadBye[indexTwo]){
+                    if(debug) System.out.println("Branching to index 2!");
+                    gameLoop(gameIndex+1, cloneGame(localGameArray), indexTwo,cloneBoolArray(localHasHadBye));
+                }
             }
         } else{
-            System.out.println("Can't Go further... this is what I got:");
+            if(debug) System.out.println("=======Can't Go further... this is what I got:=======");
             printArray(localGameArray);
         }
         
@@ -199,6 +205,24 @@ public class gameFixer {
             System.out.println("args[0] is null, please supply filename to read.");
         }
 
+    }
+
+    private static int[][] cloneGame(int[][] ingame){
+        int[][] outArray = new int[ingame.length][ingame[0].length];
+        for(int i = 0; i <outArray.length;i++){
+            for(int j = 0; j <outArray[i].length;j++){
+                outArray[i][j]=ingame[i][j];
+            }
+        }
+        return outArray;
+    }
+
+    private static boolean[] cloneBoolArray(boolean[] inArray){
+        boolean[] outArray = new boolean[inArray.length];
+        for(int i = 0; i < outArray.length;i++){
+            outArray[i] = inArray[i];
+        }
+        return outArray;
     }
 
     private static void printArray(int[][] array){
