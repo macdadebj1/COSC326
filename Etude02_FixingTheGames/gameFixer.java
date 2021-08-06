@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.io.File;
+import java.util.ArrayList;
 //import java.util.regex.Pattern;
 /**
  * Input Data constraints:
@@ -20,22 +21,28 @@ public class gameFixer {
     private static int[][] gameArray;
     private static boolean[] hasHadBye;
     private static boolean debug = false;
+    private static ArrayList<int[][]> viableGames = new ArrayList<int[][]>();
+    private static ArrayList<String> thisGame = new ArrayList<String>();
 
 
     public static void main(String[] args){
-        if(args.length >= 2){
-            if(args[1].charAt(0) == 'd' || args[1].charAt(0) =='D'){
+        if(args.length >= 1){
+            if(args[0].charAt(0) == 'd' || args[0].charAt(0) =='D'){
                 debug = true;
                 System.out.println("Debugging enabled!");
             }
         }
-        initialSetup(args[0]);
-        //printArray(gameArray);
+        initialSetup();
         gameLoop(0,gameArray,-1, hasHadBye);
-        //newGameLoop();
-        System.out.println();
-        //shiftDown(0,2);
-        //shiftDown(2, 1);
+        if(viableGames.size() == 0){
+            System.out.println("Inconsistent results");
+            System.exit(1);
+        } else if(viableGames.size() == 1){
+            System.out.println("Different results: 1");
+        }
+        //System.out.println("We got " + viableGames.size() + " possible games (may have duplicates)");
+
+        checkForDuplicateSolutions();
 
 
     }
@@ -67,14 +74,14 @@ public class gameFixer {
         //int repeatedScoreIndex
         if(debug) System.out.println("Game index: " +gameIndex);
 
-        for(int i = 0; i < numberOfPlayers; i++){
+        /*for(int i = 0; i < numberOfPlayers; i++){
             if(localHasHadBye[i] == true) byecount++;
             if(byecount == numberOfPlayers){
                 System.out.println("======== This is as far as I can get! Everyone has had a bye! ==========");
                 printArray(localGameArray);
                 return;
             }
-        }
+        }*/
 
         if(playerIndex > -1) {
             shiftDown(playerIndex, gameIndex-1,localGameArray);
@@ -126,8 +133,11 @@ public class gameFixer {
             }
             if(gameOkay){
                 /**ADD to list of okay games!*/
-                System.out.println("Found an okay game!");
-                printArray(localGameArray);
+                if(debug) System.out.println("Found an okay game!");
+                viableGames.add(localGameArray);
+                if(debug) printArray(localGameArray);
+            }else if(!gameOkay){
+                if(debug) System.out.println("Found a bad game!");
             }
         }
         
@@ -136,84 +146,82 @@ public class gameFixer {
     private static void shiftDown(int playerToShift, int gametoShiftTo,int[][] localArray){
 
         if(gametoShiftTo < numberOfGames){
-            System.out.println("Shifting down player: " +playerToShift+", in game: "+gametoShiftTo);
+            if(debug) System.out.println("Shifting down player: " +playerToShift+", in game: "+gametoShiftTo);
             for(int i = numberOfGames-2; i>= gametoShiftTo; i--){
                 localArray[i+1][playerToShift] = localArray[i][playerToShift];
                 if(i == gametoShiftTo){
                     localArray[i][playerToShift] = 0;
                 }
-                System.out.println("Shift down! " +i);
+                if(debug) System.out.println("Shift down! " +i);
             }
-            printArray(localArray);
+            if(debug) printArray(localArray);
         }
 
     }
 
-    private static void initialSetup(String filename){
+    private static void initialSetup(){
         //String fileName;
         Scanner scan, lineReader;
-        File file;
+        //File file;
         //Pattern pattern = Pattern.compile("[0-9]");
 
-        if(filename != null) {
-            try {
-                file = new File(filename);
-                if(file.exists() && file.canRead()) {
-                    scan = new Scanner(file);
-                    while(scan.hasNextLine()){
-                        numberOfGames++;
-                        String line = scan.nextLine();
-                        int playersOnThisLine = 0;
-                        lineReader = new Scanner(line);
+
+        try {
+            //file = new File(filename);
+                scan = new Scanner(System.in);
+                while(scan.hasNextLine()){
+                    numberOfGames++;
+                    String line = scan.nextLine();
+                    thisGame.add(line);
+                    int playersOnThisLine = 0;
+                    lineReader = new Scanner(line);
                         //System.out.println(line);
-                        while(lineReader.hasNext()){
-                            playersOnThisLine++;
-                            lineReader.next();
-                        }
-                        if(numberOfPlayers == 0){
-                            numberOfPlayers = playersOnThisLine;
-                            //System.out.println("Set number of players equal to players on the line!");
-                        } else if(numberOfPlayers != playersOnThisLine){
-                            System.out.println("Bad Format");
-                            System.exit(1);
-
-                        }
+                    while(lineReader.hasNext()){
+                        playersOnThisLine++;
+                        lineReader.next();
                     }
-                    System.out.println("Number of games (columns): " + numberOfGames);
-                    System.out.println("Number of players (lines): " + numberOfPlayers);
+                    if(numberOfPlayers == 0){
+                        numberOfPlayers = playersOnThisLine;
+                        //System.out.println("Set number of players equal to players on the line!");
+                    } else if(numberOfPlayers != playersOnThisLine){
+                        System.out.println("Bad Format");
+                        System.exit(1);
 
-                    numberOfGames = numberOfGames + 1;
-                    //collapsedGameArray = new int[numberOfGames-1][numberOfPlayers];
-                    gameArray = new int[numberOfGames][numberOfPlayers];
-                    hasHadBye = new boolean[numberOfPlayers];
-                    for(int i = 0; i < hasHadBye.length;i++){
-                        hasHadBye[i] = false;
                     }
+                }
+                if(debug)System.out.println("Number of games (rows): " + numberOfGames);
+                if(debug)System.out.println("Number of players (columns): " + numberOfPlayers);
 
-                    scan = new Scanner(file);
+                numberOfGames = numberOfGames + 1;
+                //collapsedGameArray = new int[numberOfGames-1][numberOfPlayers];
+                gameArray = new int[numberOfGames][numberOfPlayers];
+                hasHadBye = new boolean[numberOfPlayers];
+                for(int i = 0; i < hasHadBye.length;i++){
+                    hasHadBye[i] = false;
+                }
 
-                    for(int i = 0; i < numberOfGames; i++){
-                        for(int j = 0; j < numberOfPlayers; j++){
-                            if(scan.hasNext()) {
+                //scan = new Scanner(System.in);
+                scan.reset();
+
+                for(int i = 0; i < numberOfGames-1; i++){
+                    scan = new Scanner(thisGame.get(i));
+                    for(int j = 0; j < numberOfPlayers; j++){
+                        if(scan.hasNext()) {
+                            try {
                                 gameArray[i][j] = Integer.parseInt(scan.next());
+                            }catch(NumberFormatException e){
+                                System.out.println("Bad values");
+                                System.exit(1);
                             }
                         }
                     }
-                   printArray(gameArray);
-
-                }else{
-                    System.out.println("file object is null in main! Please supply a valid filename!");
                 }
+                if(debug)printArray(gameArray);
 
-            } catch (Exception e){
-                System.out.println("Got exception when trying to read STDIN and open file! "+e);
-            }
-
-
-
-        }else{
-            System.out.println("args[0] is null, please supply filename to read.");
+        } catch (Exception e){
+            System.out.println("Got Exception when trying to read STDIN and open file! "+e);
         }
+
 
     }
 
@@ -250,6 +258,10 @@ public class gameFixer {
         if(debug) System.out.println("CheckGame is going to return " + hadBye);
         return hadBye;
 
+    }
+
+    private static boolean checkForDuplicateSolutions(){
+        return false;
     }
 
     private static void printArray(int[][] array){
