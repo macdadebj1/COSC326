@@ -105,7 +105,7 @@ public class gameFixer {
             }
         }
         //printArray(localGameArray);
-        if(gameIndex < numberOfGames){
+        if(gameIndex < numberOfGames-1){
             if(indexOne > -1 && indexTwo > -1){
                 if(debug) System.out.println("Index one: " + indexOne + ". Index two: "+indexTwo);
                 if(!localHasHadBye[indexOne]) {
@@ -119,7 +119,16 @@ public class gameFixer {
             }
         } else{
             if(debug) System.out.println("=======Can't Go further... this is what I got:=======");
-            printArray(localGameArray);
+            boolean gameOkay = true;
+            for(int i = 0; i<localGameArray.length; i++){
+                gameOkay = checkGame(localGameArray[i]);
+
+            }
+            if(gameOkay){
+                /**ADD to list of okay games!*/
+                System.out.println("Found an okay game!");
+                printArray(localGameArray);
+            }
         }
         
     }
@@ -224,6 +233,23 @@ public class gameFixer {
             outArray[i] = inArray[i];
         }
         return outArray;
+    }
+
+    private static boolean checkGame(int[] game){
+        if(debug)System.out.println("In checkGame!");
+        boolean hadBye =false;
+        boolean[] hasScoreArray = new boolean[numberOfPlayers];
+        for(int i = 0; i < game.length;i++){
+            if(hasScoreArray[game[i]]) {
+                if(debug)System.out.println("CheckGame is going to return false!");
+                return false;
+            }
+            else hasScoreArray[game[i]] = true;
+            if(game[i]==0) hadBye = true;
+        }
+        if(debug) System.out.println("CheckGame is going to return " + hadBye);
+        return hadBye;
+
     }
 
     private static void printArray(int[][] array){
