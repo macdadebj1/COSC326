@@ -39,10 +39,11 @@ public class gameFixer {
             System.exit(1);
         } else if(viableGames.size() == 1){
             System.out.println("Different results: 1");
+            System.exit(0);
         }
         //System.out.println("We got " + viableGames.size() + " possible games (may have duplicates)");
 
-        checkForDuplicateSolutions();
+        //checkForDuplicateSolutions();
 
 
     }
@@ -243,6 +244,14 @@ public class gameFixer {
         return outArray;
     }
 
+    private static int[] cloneIntArray(int[] inArray){
+        int[] outArray = new int[inArray.length];
+        for(int i = 0; i < outArray.length;i++){
+            outArray[i] = inArray[i];
+        }
+        return outArray;
+    }
+
     private static boolean checkGame(int[] game){
         if(debug)System.out.println("In checkGame!");
         boolean hadBye =false;
@@ -261,7 +270,34 @@ public class gameFixer {
     }
 
     private static boolean checkForDuplicateSolutions(){
+        for(int i = 0; i < viableGames.size(); i++){
+            if(debug) System.out.println("=========This, sorted:===========");
+            if(debug) printArray(viableGames.get(i));
+            sortGame(viableGames.get(i));
+            if(debug) System.out.println("=========Becomes:===========");
+            if(debug) printArray(viableGames.get(i));
+
+        }
         return false;
+    }
+
+    private static void sortGame(int[][] game){
+        int length = game.length;
+        for(int k = length-1; k >=0;k--){
+            for(int i = 0; i < length; i++){
+                for(int j = i; j<length;j++){
+                    if(game[i][k] < game[j][k]){
+                        swapRows(game[i],game[j]);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void swapRows(int[] row1, int[] row2){
+        int [] tempRow = cloneIntArray(row1);
+        row1 = cloneIntArray(row2);
+        row2 = cloneIntArray(tempRow);
     }
 
     private static void printArray(int[][] array){
