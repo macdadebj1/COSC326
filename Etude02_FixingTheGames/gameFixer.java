@@ -293,7 +293,7 @@ public class gameFixer {
             if(debug) printArray(viableGames.get(i));
 
         }
-        for(int i = 0; i < viableGames.size()-2;i++){
+        for(int i = 0; i < viableGames.size()-1;i++){
             if(compareGames(viableGames.get(i),viableGames.get(i+1)) == true){
                 if(debug) System.out.println("Found a game that was the same!");
                 numberOfPossibleSolutions -=1;
