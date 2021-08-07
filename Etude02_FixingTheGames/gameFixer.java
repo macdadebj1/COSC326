@@ -41,9 +41,9 @@ public class gameFixer {
             System.out.println("Different results: 1");
             System.exit(0);
         }
-        //System.out.println("We got " + viableGames.size() + " possible games (may have duplicates)");
+        System.out.println("We got " + viableGames.size() + " possible games (may have duplicates)");
 
-        //checkForDuplicateSolutions();
+        checkForDuplicateSolutions();
 
 
     }
@@ -123,6 +123,9 @@ public class gameFixer {
                 if(!localHasHadBye[indexTwo]){
                     if(debug) System.out.println("Branching to index 2!");
                     gameLoop(gameIndex+1, cloneGame(localGameArray), indexTwo,cloneBoolArray(localHasHadBye));
+                }
+                else{
+                    if(debug) System.out.println("Fell out of if statements when trying to branch!");
                 }
             }
         } else{
@@ -273,31 +276,43 @@ public class gameFixer {
         for(int i = 0; i < viableGames.size(); i++){
             if(debug) System.out.println("=========This, sorted:===========");
             if(debug) printArray(viableGames.get(i));
-            sortGame(viableGames.get(i));
+            viableGames.set(i,sortGame(viableGames.get(i)));
             if(debug) System.out.println("=========Becomes:===========");
             if(debug) printArray(viableGames.get(i));
 
         }
         return false;
     }
-
-    private static void sortGame(int[][] game){
+    /**
+     * This is a bubble sort implementation that I used from stackoverflow
+     * sorts rows based on the content of the columns.
+     *
+     * Taken from here:
+     * https://stackoverflow.com/a/20861638
+     * */
+    private static int[][] sortGame(int[][] game){
+        int[] temp;
         int length = game.length;
         for(int k = length-1; k >=0;k--){
             for(int i = 0; i < length; i++){
                 for(int j = i; j<length;j++){
                     if(game[i][k] < game[j][k]){
-                        swapRows(game[i],game[j]);
+                        temp = game[i];
+                        game[i] = game[j];
+                        game[j] = temp;
                     }
                 }
             }
         }
+        return game;
     }
 
-    private static void swapRows(int[] row1, int[] row2){
+    /**Not currently used... but works :)*/
+    private static int[][] swapRows(int[] row1, int[] row2){
         int [] tempRow = cloneIntArray(row1);
         row1 = cloneIntArray(row2);
         row2 = cloneIntArray(tempRow);
+        return new int[][]{row1,row2};
     }
 
     private static void printArray(int[][] array){
