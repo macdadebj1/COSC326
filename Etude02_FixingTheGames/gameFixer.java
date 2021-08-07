@@ -23,6 +23,7 @@ public class gameFixer {
     private static boolean debug = false;
     private static ArrayList<int[][]> viableGames = new ArrayList<int[][]>();
     private static ArrayList<String> thisGame = new ArrayList<String>();
+    private static int numberOfPossibleSolutions = 0;
 
 
     public static void main(String[] args){
@@ -41,10 +42,11 @@ public class gameFixer {
             System.out.println("Different results: 1");
             System.exit(0);
         }
-        System.out.println("We got " + viableGames.size() + " possible games (may have duplicates)");
+        numberOfPossibleSolutions = viableGames.size();
+        if(debug) System.out.println("We got " + numberOfPossibleSolutions + " possible games (may have duplicates)");
 
         checkForDuplicateSolutions();
-
+        System.out.println("Different results: "+numberOfPossibleSolutions);
 
     }
 
@@ -255,6 +257,10 @@ public class gameFixer {
         return outArray;
     }
 
+    /**
+     * Goes through a given game and makes sure it meets the criteria to be expanded
+     * Criteria are: no duplicate scores and there must be a single bye.
+     * */
     private static boolean checkGame(int[] game){
         if(debug)System.out.println("In checkGame!");
         boolean hadBye =false;
@@ -265,14 +271,20 @@ public class gameFixer {
                 return false;
             }
             else hasScoreArray[game[i]] = true;
-            if(game[i]==0) hadBye = true;
+            if(game[i]==0) {
+                if(!hadBye) hadBye = true;
+                else if(hadBye){
+                    if(debug) System.out.println("Check game has found a game with multiple byes!");
+                    return false;
+                }
+            }
         }
         if(debug) System.out.println("CheckGame is going to return " + hadBye);
         return hadBye;
 
     }
 
-    private static boolean checkForDuplicateSolutions(){
+    private static void checkForDuplicateSolutions(){
         for(int i = 0; i < viableGames.size(); i++){
             if(debug) System.out.println("=========This, sorted:===========");
             if(debug) printArray(viableGames.get(i));
@@ -281,8 +293,25 @@ public class gameFixer {
             if(debug) printArray(viableGames.get(i));
 
         }
-        return false;
+        for(int i = 0; i < viableGames.size()-2;i++){
+            if(compareGames(viableGames.get(i),viableGames.get(i+1)) == true){
+                if(debug) System.out.println("Found a game that was the same!");
+                numberOfPossibleSolutions -=1;
+            }else{
+                if(debug) System.out.println("Found two different games!");
+            }
+        }
+
     }
+    private static boolean compareGames(int [][] game1,int[][] game2){
+        for(int i = 0; i < game1.length; i++){
+            for(int j = 0; j < game1[i].length;j++){
+                if(game1[i][j] != game2[i][j]) return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * This is a bubble sort implementation that I used from stackoverflow
      * sorts rows based on the content of the columns.
