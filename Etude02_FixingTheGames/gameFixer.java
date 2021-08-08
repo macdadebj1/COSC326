@@ -17,7 +17,6 @@ public class gameFixer {
 
     private static int numberOfPlayers = 0;
     private static int numberOfGames = 0;
-    //private static int[][] collapsedGameArray;
     private static int[][] gameArray;
     private static boolean[] hasHadBye;
     private static boolean debug = false;
@@ -39,6 +38,7 @@ public class gameFixer {
             System.out.println("Inconsistent results");
             System.exit(1);
         } else if(viableGames.size() == 1){
+            printArray(viableGames.get(0));
             System.out.println("Different results: 1");
             System.exit(0);
         }
@@ -49,22 +49,6 @@ public class gameFixer {
         System.out.println("Different results: "+numberOfPossibleSolutions);
 
     }
-
-    /*private static void newGameLoop(){
-        int[] currentGameScores = new int[numberOfPlayers];
-        for(int i = 0; i < numberOfGames; i++){
-            for(int j = 0; j <numberOfPlayers; j++){
-                int playerScore = gameArray[i][j];
-                if(currentGameScores[playerScore]==0) {
-                    currentGameScores[playerScore] = j;
-                    if (debug) System.out.println("We haven't seen this score in this game before! "+currentGameScores[playerScore]);
-                }else if(currentGameScores[playerScore] != 0){
-                    if (debug) System.out.println("We have seen this score in this game before! "+playerScore + " at index: "+currentGameScores[playerScore]);
-                }
-            }
-        }
-
-    }*/
 
     /**
      * Main loop that recursively tries to expand the games array.
@@ -138,6 +122,8 @@ public class gameFixer {
             boolean gameOkay = true;
             for(int i = 0; i<localGameArray.length; i++){
                 gameOkay = checkGame(localGameArray[i]);
+                if(gameOkay == false) break;
+
 
             }
             if(gameOkay){
@@ -223,7 +209,9 @@ public class gameFixer {
                     for(int j = 0; j < numberOfPlayers; j++){
                         if(scan.hasNext()) {
                             try {
-                                gameArray[i][j] = Integer.parseInt(scan.next());
+                                int value = Integer.parseInt(scan.next());
+                                if(value > 0) gameArray[i][j] = value;
+                                else throw new NumberFormatException();
                             }catch(NumberFormatException e){
                                 System.out.println("Bad values");
                                 System.exit(1);
@@ -305,7 +293,7 @@ public class gameFixer {
     private static void checkForDuplicateSolutions(){
         for(int i = 0; i < viableGames.size(); i++){
             if(debug) System.out.println("=========This, sorted:===========");
-            if(debug) printArray(viableGames.get(i));
+            printArray(viableGames.get(i));
             viableGames.set(i,sortGame(viableGames.get(i)));
             if(debug) System.out.println("=========Becomes:===========");
             if(debug) printArray(viableGames.get(i));
@@ -379,6 +367,7 @@ public class gameFixer {
             }
             System.out.println("");
         }
+        System.out.println();
 
     }
 
