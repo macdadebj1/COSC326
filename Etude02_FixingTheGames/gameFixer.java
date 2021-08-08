@@ -66,6 +66,9 @@ public class gameFixer {
 
     }*/
 
+    /**
+     * Main loop that recursively tries to expand the games array.
+     * */
     private static void gameLoop(int gameI, int[][] localGame,int playerI,boolean[] localBye){
         int[][] localGameArray = localGame;
         boolean[] localHasHadBye = localBye;
@@ -149,6 +152,9 @@ public class gameFixer {
         
     }
 
+    /**
+     * shifts the scores of one player down from a starting game index.
+     * */
     private static void shiftDown(int playerToShift, int gametoShiftTo,int[][] localArray){
 
         if(gametoShiftTo < numberOfGames){
@@ -165,6 +171,9 @@ public class gameFixer {
 
     }
 
+    /**
+     * Handles reading the data from stdin and storing in a 2d array.
+     * */
     private static void initialSetup(){
         //String fileName;
         Scanner scan, lineReader;
@@ -231,6 +240,9 @@ public class gameFixer {
 
     }
 
+    /**
+     * Helper method to clone a 2d int array.
+     * */
     private static int[][] cloneGame(int[][] ingame){
         int[][] outArray = new int[ingame.length][ingame[0].length];
         for(int i = 0; i <outArray.length;i++){
@@ -241,6 +253,9 @@ public class gameFixer {
         return outArray;
     }
 
+    /**
+     * Helper method to clone an array.
+     * */
     private static boolean[] cloneBoolArray(boolean[] inArray){
         boolean[] outArray = new boolean[inArray.length];
         for(int i = 0; i < outArray.length;i++){
@@ -284,6 +299,9 @@ public class gameFixer {
 
     }
 
+    /**
+     * will check if two games are the same as each other, if so, it will remove one from the total number of unique games.
+     * */
     private static void checkForDuplicateSolutions(){
         for(int i = 0; i < viableGames.size(); i++){
             if(debug) System.out.println("=========This, sorted:===========");
@@ -303,6 +321,10 @@ public class gameFixer {
         }
 
     }
+
+    /**
+     * returns whether or not two games are exactly the same.
+     * */
     private static boolean compareGames(int [][] game1,int[][] game2){
         for(int i = 0; i < game1.length; i++){
             for(int j = 0; j < game1[i].length;j++){
@@ -322,10 +344,10 @@ public class gameFixer {
     private static int[][] sortGame(int[][] game){
         int[] temp;
         int length = game.length;
-        for(int k = length-1; k >=0;k--){
-            for(int i = 0; i < length; i++){
-                for(int j = i; j<length;j++){
-                    if(game[i][k] < game[j][k]){
+        for(int k = length-1; k >=0;k--){         // Copied lines...
+            for(int i = 0; i < length; i++){      //
+                for(int j = i; j<length;j++){     //
+                    if(game[i][k] < game[j][k]){  //
                         temp = game[i];
                         game[i] = game[j];
                         game[j] = temp;
