@@ -100,7 +100,7 @@ public class preference{
     }
 
     private static Candidate copyCandidate(Candidate c){
-        return new Candidate(c.name,c.votes);
+        return new Candidate(c);
     }
 
 
