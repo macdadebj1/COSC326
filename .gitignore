@@ -1,3 +1,5 @@
 *.class
 .idea/*
 */.idea/*
+*.xml
+*/.idea/*.xml
