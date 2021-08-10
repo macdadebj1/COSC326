@@ -2,12 +2,14 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class preference{
 
-    private static Map<String, Integer> ballot = new HashMap<>();
+    //private static Map<String, Integer> ballot = new HashMap<>();
 
     private static ArrayList<Voter> voterList= new ArrayList<>();
+    private static ArrayList<Candidate> candidateArrayList = new ArrayList<>();
 
     private static boolean debug = false;
 
@@ -22,7 +24,10 @@ public class preference{
         readVoterInfo();
         if(debug) printBallot();
         readBallotInfo();
-        if(debug) System.out.println(ballot);
+        if(debug) printCurrentRound();
+        if(debug) System.out.println("================");
+        sortCurrentRound();
+        if(debug) printCurrentRound();
     }
 
     private static void readVoterInfo(){
@@ -44,10 +49,12 @@ public class preference{
     private static void readBallotInfo(){
         for(int i = 0; i < voterList.size();i++) {
             String name = voterList.get(i).voteList.get(0);
-            if (ballot.containsKey(name)) {
-                ballot.put(name, ballot.get(name) + 1);
+            int index = findCandidate(name);
+            if (index > -1) {
+                candidateArrayList.get(index).votes+=1;
+                //ballot.put(name, ballot.get(name) + 1);
             } else {
-                ballot.put(name, 1);
+                candidateArrayList.add(new Candidate(name,1));
             }
         }
     }
@@ -60,6 +67,40 @@ public class preference{
             }
             System.out.println();
         }
+    }
+
+    private static int findCandidate(String name){
+        for(int i = 0; i < candidateArrayList.size();i++){
+            if(candidateArrayList.get(i).name.equals(name)){
+                //if(debug) System.out.println("Found a matching candidate at index "+i);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static void printCurrentRound(){
+        for(int i = 0; i < candidateArrayList.size();i++){
+            System.out.println(candidateArrayList.get(i));
+        }
+    }
+
+    private static void sortCurrentRound(){
+        Collections.sort(candidateArrayList);
+        /*
+        for(int i = 0; i < candidateArrayList.size();i++){
+            for(int j = 0; j <candidateArrayList.size();j++){
+                if(candidateArrayList.get(i).votes < candidateArrayList.get(i).votes){
+                    Candidate temp = copyCandidate(candidateArrayList.get(i));
+                    candidateArrayList.set(i,copyCandidate(candidateArrayList.get(j)));
+                    candidateArrayList.set(j,copyCandidate(temp));
+                }
+            }
+        }*/
+    }
+
+    private static Candidate copyCandidate(Candidate c){
+        return new Candidate(c.name,c.votes);
     }
 
 
