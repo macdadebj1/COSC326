@@ -8,6 +8,11 @@ public class Candidate implements Comparable<Candidate>{
         this.votes = votes;
     }
 
+    public Candidate(Candidate c){
+        this.name = c.name;
+        this.votes = c.votes;
+    }
+
     public String toString(){
         return name +"\t"+votes;
     }
