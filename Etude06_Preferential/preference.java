@@ -30,6 +30,10 @@ public class preference{
         if(debug) printCurrentRound();
     }
 
+    private static void doElection(){
+
+    }
+
     private static void readVoterInfo(){
         if(debug) System.out.println("Reading Ballot Info!");
         Scanner scan = new Scanner(System.in);
