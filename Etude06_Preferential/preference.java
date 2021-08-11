@@ -30,8 +30,13 @@ public class preference{
         if(debug) printCurrentRound();
     }
 
-    private static void doElection(){
+    private static boolean doElection(){
+        if(candidateArrayList.get(0).votes >= voterList.size()/2) return true;
+        else if(candidateArrayList.get(0).votes == candidateArrayList.get(1).votes){
+            //Tie...
+        }else{
 
+        }
     }
 
     private static void readVoterInfo(){
