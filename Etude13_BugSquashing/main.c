@@ -37,7 +37,7 @@ void sln(struct S** ss){
     ss[j] = ss[i];
 }
 
-int ffn(struct S** ss, char* s){
+int ffn(struct S** ss, char* s){ //named incorrectly, is redeclaring ffn, should be find last name
     while(++i < count) {
         if (ss[i]->lastName == s)
             return 1;
