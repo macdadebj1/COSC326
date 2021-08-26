@@ -1,0 +1,3 @@
+- make file is including maths, which shouldn't be doing, as program doesn't use maths library so will make program larger than it neeeds to be.
+- effectively muting all error messages in make file, sending stream 2 to /dev/null
+- very difficult to read method names
