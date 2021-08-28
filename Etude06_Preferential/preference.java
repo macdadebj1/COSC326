@@ -66,7 +66,14 @@ public class preference{
                 Candidate c = currentCandidateArrayList.get(currentCandidateArrayList.size()-1);
                 redistributeVotes(c);
             }else{ //tie... :(
-                 TIEBREAKER(candidatesWithDuplicateVotes);
+                 String result = TIEBREAKER(candidatesWithDuplicateVotes);
+                 if(result == null){
+                     System.out.println("Unbreakable tie");
+                     System.exit(0);
+                 }else{
+                     if(debug) System.out.println("found a loser! "+result);
+                 }
+                 updateHashMap();
             }
 
 
@@ -74,13 +81,52 @@ public class preference{
         return false;
     }
 
-     private static void TIEBREAKER(ArrayList<String> nameArrayList){
-
-        for(int i = gameHistory.size()-1; i <= 0 ; i--){
-            for(int i = gameHistory.get(i).size()-1;i <=0;i++){
-
+     private static String TIEBREAKER(ArrayList<String> nameArrayList){
+        if(debug) System.out.println("In TIEBREAKER!");
+        if(debug) System.out.println("game history size: " +gameHistory.size());
+        if(gameHistory.size() > 0){
+            for(int i = gameHistory.size()-1; i >= 0 ; i--){
+                ArrayList<Candidate> tempCandidateArray = cloneArrayList(gameHistory.get(i));
+                if(debug) System.out.println("in first level");
+                if(debug) System.out.println("This previous round has "+tempCandidateArray.size()+" candidates.");
+                if(debug) System.out.println("name array list size: "+nameArrayList.size());
+                if(debug) System.out.println("Looking at previous round: "+ i);
+                Collections.sort(tempCandidateArray);
+                Collections.reverse(tempCandidateArray);
+                if(debug)printGivenRound(tempCandidateArray);
+                /*if(tempCandidateArray.get(0).votes < tempCandidateArray.get(1).votes){
+                    String name = tempCandidateArray.get(0).name;
+                    if(debug) System.out.println(name+" is this rounds loser, with a score of: "+tempCandidateArray.get(0).votes);
+                    if(debug) System.out.println("His opponent "+tempCandidateArray.get(1).name +" had "+ tempCandidateArray.get(1).votes+ " votes!");
+                    return name;
+                }
+                else{
+                    if(debug) System.out.println("Didn't find a resolution this round! Will continue!");
+                }*/
+                for(int j = 0; j < nameArrayList.size(); j++){
+                    if(contains(nameArrayList,tempCandidateArray.get(j).name)){
+                        if(debug) System.out.println(tempCandidateArray.get(j).name +" is here!");
+                        if(tempCandidateArray.get(j).votes < tempCandidateArray.get(j+1).votes){
+                            String name = tempCandidateArray.get(j).name;
+                            if(debug) System.out.println(name+" is this rounds loser, with a score of: "+tempCandidateArray.get(i).votes);
+                            if(debug) System.out.println("His opponent "+tempCandidateArray.get(j+1).name +" had "+ tempCandidateArray.get(j+1).votes+ " votes!");
+                            return name;
+                        }
+                        else{
+                            if(debug) System.out.println("Didn't find a resolution this round! Will continue!");
+                            break;
+                        }
+                    }else{
+                        if(debug) System.out.println("Theoretically, we shouldn't be here... apparently, we can't find the name "+tempCandidateArray.get(j).name);
+                    }
+                }
             }
         }
+        else{
+            if(debug) System.out.println("We have no history!!!"); // Need to sort when there is a tie and we have no history to look through!
+        }
+        return null;
+
      }
 
      /**
@@ -88,6 +134,7 @@ public class preference{
       * @param c the candidate whos votes we are going to be dividing out.
       * */
     private static void redistributeVotes(Candidate c){
+        if(debug) System.out.println(c.name +" has " +c.votes+ " votes!");
         for(int i = 0; i <voterList.size();i++){
             Voter v = voterList.get(i);
             if(debug) System.out.println("searching for: "+c.name);
@@ -101,6 +148,7 @@ public class preference{
                     addVote(tempCandidate, 1);
                 }else{ //If they don't have another next-best choice...
                     voterList.remove(i); //TODO we are removing the voter from the voting pool if they don't have another option... may not want to do this..?
+                    i-=1;
                     if(debug) System.out.println("A Voter didn't have another option to choose, so they didn't vote...");
                 }
             }else{
@@ -116,6 +164,18 @@ public class preference{
         } else{
             if(debug) System.out.println("Error removing candidate from pool!, they still have votes assigned to them!");
         }
+    }
+
+    private static boolean contains(ArrayList<String> a, String s){
+        for(int i = 0; i < a.size();i++){
+
+            if(a.get(i).equals(s)){
+                if(debug) System.out.println("Contains: "+a.get(i));
+                return true;
+            }
+        }
+        return false;
+
     }
 
     /**
@@ -233,6 +293,14 @@ public class preference{
     private static void printCurrentRound(){
         for(int i = 0; i < currentCandidateArrayList.size(); i++){
             System.out.println(currentCandidateArrayList.get(i));
+        }
+    }
+
+    private static void printGivenRound(ArrayList<Candidate> a){
+        if(debug) System.out.println("!+!+!+!+!+!+!+!");
+        if(debug) System.out.println("Printing Custom Round!");
+        for(int i = 0; i < a.size(); i++){
+            System.out.println(a.get(i));
         }
     }
 
