@@ -17,8 +17,8 @@ public class Candidate implements Comparable<Candidate>{
     }
 
     public String toString(){
-        //return String.format("%-11s %s",name,votes);
-        return String.format("%s  %s",name,votes);
+        return String.format("%-11s %s",name,votes); //TODO: needs to be three chars longer than longest name!
+        //return String.format("%s  %s",name,votes);
     }
 
     /**
