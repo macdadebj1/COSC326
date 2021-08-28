@@ -8,6 +8,9 @@ public class Candidate implements Comparable<Candidate>{
         this.votes = votes;
     }
 
+    /**
+     * Copy constructor.
+     * */
     public Candidate(Candidate c){
         this.name = c.name;
         this.votes = c.votes;
@@ -18,6 +21,9 @@ public class Candidate implements Comparable<Candidate>{
         return String.format("%s  %s",name,votes);
     }
 
+    /**
+     * Custom comparitor, used by collections to sort the candidate ArrayList based on number of votes.
+     * */
     @Override
     public int compareTo(Candidate c){
         if(c.votes > this.votes){
