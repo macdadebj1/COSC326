@@ -1,3 +1,5 @@
+package Preference;
+
 import java.util.Scanner;
 import java.util.HashMap;
 //import java.util.Map
@@ -22,6 +24,8 @@ public class preference{
     //Used mainly to stop infinite recursion...
     private static int recursiveDepth = 0;
 
+    protected static int maxNameLength = 20;
+
     //Global debug flag.
     private static boolean debug = false;
 
@@ -37,6 +41,7 @@ public class preference{
         if(debug) printBallot();
         if(debug) System.out.println("================");
         readBallotInfo();
+        getMaxNameLength();
         if(debug) printCurrentRound();
         if(debug) System.out.println("================");
         sortCurrentRound();
@@ -165,6 +170,8 @@ public class preference{
             if(debug) System.out.println("Error removing candidate from pool!, they still have votes assigned to them!");
         }
     }
+
+    private static getMaxNameLength
 
     private static boolean contains(ArrayList<String> a, String s){
         for(int i = 0; i < a.size();i++){

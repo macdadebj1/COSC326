@@ -1,7 +1,10 @@
+package Preference;
+
 public class Candidate implements Comparable<Candidate>{
 
     public int votes;
     public String name;
+    public int maxNameLength;
 
     public Candidate(String name, int votes){
         this.name = name;
@@ -17,7 +20,7 @@ public class Candidate implements Comparable<Candidate>{
     }
 
     public String toString(){
-        return String.format("%-11s %s",name,votes); //TODO: needs to be three chars longer than longest name!
+        return String.format("%-"+preference.maxNameLength+"s %s",name,votes); //TODO: needs to be three chars longer than longest name!
         //return String.format("%s  %s",name,votes);
     }
 
