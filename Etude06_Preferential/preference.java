@@ -36,7 +36,8 @@ public class preference{
         recursiveDepth++;
         if(debug) System.out.println("==========");
         if(recursiveDepth >10) System.exit(1);
-        if(debug) printCurrentRound();
+        System.out.println("Round " +recursiveDepth);
+        printCurrentRound();
         if(candidateArrayList.get(0).votes > voterList.size()/2){
             System.out.println("Winner: "+candidateArrayList.get(0).name);
             return true;
@@ -67,7 +68,7 @@ public class preference{
             }
             if(c.votes==0){
                 if(debug) System.out.println("Removing a candidate from the pool!");
-                System.out.println("Eliminated: "+c.name);
+                System.out.println("Eliminated: "+c.name+"\n");
                 candidateArrayList.remove(candidateArrayList.size()-1);
                 doElection();
             } else{
