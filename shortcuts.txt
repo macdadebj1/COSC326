@@ -1,0 +1,50 @@
+1	Alt+Up/Down (^Up/Down)	Jump to next method
+2	Ctrl+Alt+Left/Right (⌥[/])	Go back/forward location
+3	Alt+Left/Right	Switch to next file
+4	Alt+Enter (⌥Enter)	Show action intentions
+5	Ctrl+B (⌘B)	Go to declaration
+6	Ctrl+Shift+F (⇧⌘F)	Find in path
+7	Ctrl+Alt+L (⌥⌘L)	Reformat code
+8	Ctrl+Alt+O (^⌥O)	Organise Imports
+9	F8	(In debug) Step over
+10	Ctrl+F (⌘F)	Search current file
+11	Alt+Insert (⌘N)	Generate code (can be done in multiple views)
+12	Ctrl+Alt+M (⌥⌘M)	(With code highlighted) Extract method
+13	Alt+F8 (⌥F8)	(In debug) Open evaluation window
+14	Ctrl+/ (⌘/)	Comment code
+15	F7	(In debug) Step into
+16	Ctrl+Shift+N (⇧⌘O)	Search classes/files/symbols/actions
+17	Ctrl+F4	Close current tab
+18	Alt+F7 (⌥F7)	Find all usages
+19	Ctrl+F8 (⌘F8)	Add breakpoint
+20	Ctrl+Up/Down	Move view
+21	Alt+1 (⌘1)	Opens up file explorer
+22	Ctrl+D (⌘D)	Duplicates line
+23	Ctrl+Space (^Space)	Basic code completion
+24	Shift+F9 (^D)	Begin debugger
+25	F9 (⌥⌘F9)	(In debug) Resume Program
+26	Ctrl+Shift+Space (^⇧Space)	Complete current statement
+27	Alt+1, Alt+Insert (⌘1, ⌘N)	Create new file
+28	shift + alt + up/down (⌥⇧Up/Down)	Move code
+29	Alt+F9 (⌥F9)	(In debug) Continue execution and stop at cursor
+30	Ctrl+E (⌘E)	Recent files
+31	Alt+F10 (⌥F10)	(In debug) Go to where execution stopped
+32	Ctrl+Shift+V (⇧⌘V)	Paste from recent clipboards
+33	Double Shift	Search anywhere
+34	Ctrl+P (⌘P)	Parameter info
+35	Ctrl+Shift+/ (⌥⌘/)	Comment block code
+36	Ctrl+X (⌘X)	Cut (line or highlighted)
+37	Shift+F6 (⇧F6)	Rename
+38	Ctrl+Alt+S (⌘,)	Settings
+39	Ctrl+K (⌘K)	Commit changes window
+40	Ctrl+Shift+R (⇧⌘R)	Replace in path
+41	Ctrl+O (^O)	Override methods
+42	Ctrl+Shift+E (⇧⌘E)	Recent locations
+43	Ctrl+R (⌘R)	Replace
+44	Alt+J (^G)	Select next occurence
+45	Ctrl+Alt+V (⌥⌘V)	Extract variable
+46	Shift+F10 (^R)	Run
+47	Ctrl+Alt+F7 (⌥⌘F7)	Show usages
+48	Ctrl+Alt+T	Surround with
+49	Ctrl+Shift+Alt+T (⌥⌘T)	Refactor this
+50	Double Ctrl	Run anything
