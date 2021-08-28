@@ -43,18 +43,33 @@ public class preference{
         if(currentCandidateArrayList.get(0).votes > voterList.size()/2){
             System.out.println("Winner: "+ currentCandidateArrayList.get(0).name);
             return true;
-        }
-        else if(currentCandidateArrayList.get(0).votes == currentCandidateArrayList.get(1).votes){
-            if(debug) System.out.println("Tie!");
-            //Tie...
         }else{
-            Candidate c = currentCandidateArrayList.get(currentCandidateArrayList.size()-1);
-            redistributeVotes(c);
+            int votesAtLastIndex = currentCandidateArrayList.get(currentCandidateArrayList.size()-1).votes;
+            int numberOfSameVotes = 0;
+            ArrayList<String> candidatesWithDuplicateVotes = new ArrayList<>();
+            for(int i = currentCandidateArrayList.size()-1; i >=0; i--){
+                if(currentCandidateArrayList.get(i).votes == votesAtLastIndex){
+                    numberOfSameVotes++;
+                    candidatesWithDuplicateVotes.add(currentCandidateArrayList.get(i).name);
+                }else break;
+            }
+            if(numberOfSameVotes == 1){ //no Tie!
+                Candidate c = currentCandidateArrayList.get(currentCandidateArrayList.size()-1);
+                redistributeVotes(c);
+            }else{ //tie... :(
+                 TIEBREAKER(candidatesWithDuplicateVotes,numberOfSameVotes);
+            }
 
 
         }
         return false;
     }
+
+     private static void TIEBREAKER(ArrayList<String> c, int numSame){
+        for(int i = 0; i < numSame; i++){
+
+        }
+     }
 
     private static void redistributeVotes(Candidate c){
         for(int i = 0; i <voterList.size();i++){
