@@ -8,7 +8,7 @@ struct S{
     char *firstName;
     char* lastName; // inconsistent * placement.
     int phone;
-    char* emialAddress; //bad spelling
+    char* emailAddress;
 };
 
 static int i, j;
@@ -22,7 +22,7 @@ void sfn(struct S** ss){
     ss[j] = ss[i];
 }
 
-int ffn(struct S** ss, char* s){
+int findFirstName(struct S** ss, char* s){
     while(++i < count)
         if(ss[i]->firstName == s)  //Add in curly braces, make reading easier...
             return 1;
@@ -37,7 +37,7 @@ void sln(struct S** ss){
     ss[j] = ss[i];
 }
 
-int ffn(struct S** ss, char* s){ //named incorrectly, is redeclaring ffn, should be find last name
+int findLastName(struct S** ss, char* s){ //named incorrectly, is redeclaring ffn, should be find last name
     while(++i < count) {
         if (ss[i]->lastName == s)
             return 1;
@@ -48,7 +48,7 @@ int ffn(struct S** ss, char* s){ //named incorrectly, is redeclaring ffn, should
 void sem(struct S** ss){
     for(i = 0; i < count; i++){
         for (j = 0; j < count; j++){
-            if(ss[i]->emialAddress > ss[j]->emialAddress) { //typo
+            if(ss[i]->emailAddress > ss[j]->emailAddress) { //typo
                 struct S *s = ss[i];
                 ss[j] = ss[i]; //will just reasign ss[j] twice... not what we want...
                 ss[j] = s;
@@ -57,9 +57,9 @@ void sem(struct S** ss){
     }
 }
 
-int fem(struct S** ss,char* s){
+int findEmail(struct S** ss,char* s){
     while(++i < count){
-        if(ss[i]->emialAddress == s)
+        if(ss[i]->emailAddress == s)
             return 1;
     }
     return 0;
@@ -77,7 +77,7 @@ void sph(struct S** ss){
     }
 }
 
-int fph(struct S** ss, int s){
+int findPhoneNumber(struct S** ss, int s){
     while(++i < count){
         if(ss[i]->phone == ss)
             return 1;
@@ -98,10 +98,10 @@ int main(int argc, char ** argv){ //inconsistent ** placement...
     for(i = 0; i < 50; i++){
         s->firstName = (char*) malloc(80 * sizeof(s->firstName[0]));
         s->lastName = (char*) malloc(80 * sizeof(s->firstName[0])); //May go out of bounds...
-        s->emialAddress = (char*) malloc(80 * sizeof(s->firstName[0])); //May go out of bounds...
+        s->emailAddress = (char*) malloc(80 * sizeof(s->firstName[0])); //May go out of bounds...
 
         //fscanf is depreciated... use fscanf_s instead...
-        fscanf(f, "%s %s %d %s", &s->firstName,&s->lastName, &s->phone,&s->emialAddress);
+        fscanf(f, "%s %s %d %s", &s->firstName,&s->lastName, &s->phone,&s->emailAddress);
 
         ss[count] = s;
         count+=1;
@@ -117,22 +117,22 @@ int main(int argc, char ** argv){ //inconsistent ** placement...
                     case 1:
                         printf("looking for email %s\n",val);
                         sem(ss);
-                        printf("found it? %d\n",fem(ss,val));
+                        printf("found it? %d\n",findEmail(ss,val));
                         break;
                     case 2:
                         printf("looking for firstname %s\n",val);
                         sfn(ss);
-                        printf("found it? %d\n",ffn(ss,val));
+                        printf("found it? %d\n",findFirstName(ss,val));
                         break;
                     case 3:
                         printf("looking for lastname %s\n",val);
                         sln(ss);
-                        printf("found it? %d\n",fln(ss,val));
+                        printf("found it? %d\n",findLastName(ss,val));
                         break;
                     case 4:
                         printf("looking for email %s\n",val); //should be looking for ph number.
-                        sph(ss)
-                        printf("found it? %d\n",fph(ss,atoi(val)));
+                        sph(ss);
+                        printf("found it? %d\n",findPhoneNumber(ss,atoi(val)));
                     default:
                         break;
                 }
