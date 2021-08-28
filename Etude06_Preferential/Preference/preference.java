@@ -50,13 +50,16 @@ public class preference{
         if(debug) System.out.println(gameHistory.size());
     }
 
+    /**
+     * The main election loop, is done recursively
+     * */
     private static boolean doElection(){
         Collections.sort(currentCandidateArrayList);
         updateHashMap();
         saveRound();
-        recursiveDepth++;
+        //recursiveDepth++;
         if(debug) System.out.println("==========");
-        if(recursiveDepth >10) System.exit(1);
+        //if(recursiveDepth >10) System.exit(1);
         System.out.println("Round " +recursiveDepth);
         printCurrentRound();
         if(currentCandidateArrayList.get(0).votes > voterList.size()/2){
@@ -92,6 +95,10 @@ public class preference{
         return false;
     }
 
+    /**
+     * Attempts to break a tie.
+     * @param nameArrayList the names of candidates who are tying.
+     * */
      private static String TIEBREAKER(ArrayList<String> nameArrayList){
         if(debug) System.out.println("In TIEBREAKER!");
         if(debug) System.out.println("game history size: " +gameHistory.size());
@@ -316,6 +323,9 @@ public class preference{
         }
     }
 
+    /**
+     * Prints a custom round.
+     * */
     private static void printGivenRound(ArrayList<Candidate> a){
         if(debug) System.out.println("!+!+!+!+!+!+!+!");
         if(debug) System.out.println("Printing Custom Round!");
@@ -324,6 +334,9 @@ public class preference{
         }
     }
 
+    /**
+     * Prints a string ArrayList.
+     * */
     private static void printArrayList(ArrayList<String> a){
         if(debug) System.out.println("!+!+!+!+!+!+!+!");
         if(debug) System.out.println("Printing Custom ArrayList!");
