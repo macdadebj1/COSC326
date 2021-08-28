@@ -1,16 +1,16 @@
 import java.util.Scanner;
 import java.util.HashMap;
-import java.util.Map;
+//import java.util.Map
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 public class preference{
 
-    //private static Map<String, Integer> ballot = new HashMap<>();
-
+    private static HashMap<String, Integer> candidateLocation = new HashMap<>();
     private static ArrayList<Voter> voterList= new ArrayList<>();
     private static ArrayList<Candidate> candidateArrayList = new ArrayList<>();
-
+    private static int recursiveDepth = 0;
     private static boolean debug = false;
 
     public static void main(String args[]){
@@ -23,19 +23,69 @@ public class preference{
         }
         readVoterInfo();
         if(debug) printBallot();
+        if(debug) System.out.println("================");
         readBallotInfo();
         if(debug) printCurrentRound();
         if(debug) System.out.println("================");
         sortCurrentRound();
-        if(debug) printCurrentRound();
+        //if(debug) printCurrentRound();
+        doElection();
     }
 
     private static boolean doElection(){
-        if(candidateArrayList.get(0).votes >= voterList.size()/2) return true;
+        recursiveDepth++;
+        if(debug) System.out.println("==========");
+        if(recursiveDepth >10) System.exit(1);
+        if(debug) printCurrentRound();
+        if(candidateArrayList.get(0).votes > voterList.size()/2){
+            System.out.println("Winner: "+candidateArrayList.get(0).name);
+            return true;
+        }
         else if(candidateArrayList.get(0).votes == candidateArrayList.get(1).votes){
+            if(debug) System.out.println("Tie!");
             //Tie...
         }else{
+            Candidate c = candidateArrayList.get(candidateArrayList.size()-1);
+            for(int i = 0; i <voterList.size();i++){
+                Voter v = voterList.get(i);
+                if(debug) System.out.println("searching for: "+c.name);
+                if(debug) System.out.println("Searching voter: "+i+". They voted for: "+v.voteList.get(v.voteIndex));
+                if(v.voteList.get(v.voteIndex).equals(c.name)){
+                    v.voteIndex += 1;
+                    c.votes--;
+                    if(v.voteList.size() > v.voteIndex) { //If they still have another next-best choice...
+                        String tempCandidate = v.voteList.get(v.voteIndex);
+                        if (debug) System.out.println("added one vote to: " + tempCandidate);
+                        addVote(tempCandidate, 1);
+                    }else{ //If they don't have another next-best choice...
+                        voterList.remove(i);
+                        if(debug) System.out.println("A Voter didn't have another option to choose, so they didn't vote...");
+                    }
+                }else{
+                    if(debug) System.out.println("didn't match!");
+                }
+            }
+            if(c.votes==0){
+                if(debug) System.out.println("Removing a candidate from the pool!");
+                System.out.println("Eliminated: "+c.name);
+                candidateArrayList.remove(candidateArrayList.size()-1);
+                doElection();
+            } else{
+                if(debug) System.out.println("Error removing candidate from pool!, they still have votes assigned to them!");
+            }
 
+        }
+        return false;
+    }
+
+    private static void addVote(String name,int numberOfVotes){
+        if(debug) System.out.println("In adding vote!");
+        if(candidateLocation.containsKey(name)){
+            if(debug) System.out.println("in adding vote if statement, candidateLocation contains Key!");
+            int index = candidateLocation.get(name);
+            candidateArrayList.get(index).votes+=numberOfVotes;
+        }else{
+            if(debug) System.out.println("index is null in addVote! this means the hashmap doesn't have an index available for candidate: "+name);
         }
     }
 
@@ -53,6 +103,14 @@ public class preference{
             voterList.add(v);
         }
 
+    }
+
+    private static void updateHashMap(){
+        candidateLocation.clear();
+        if(debug) System.out.println("Updating HashMap!");
+        for(int i = 0; i < candidateArrayList.size();i++){
+            candidateLocation.put(candidateArrayList.get(i).name,i);
+        }
     }
 
     private static void readBallotInfo(){
@@ -86,6 +144,8 @@ public class preference{
             }
         }
         return -1;
+        //if(candidateLocation.containsKey(name)) return candidateLocation.get(name);
+        //else return -1;
     }
 
     private static void printCurrentRound(){
@@ -96,21 +156,8 @@ public class preference{
 
     private static void sortCurrentRound(){
         Collections.sort(candidateArrayList);
-        /*
-        for(int i = 0; i < candidateArrayList.size();i++){
-            for(int j = 0; j <candidateArrayList.size();j++){
-                if(candidateArrayList.get(i).votes < candidateArrayList.get(i).votes){
-                    Candidate temp = copyCandidate(candidateArrayList.get(i));
-                    candidateArrayList.set(i,copyCandidate(candidateArrayList.get(j)));
-                    candidateArrayList.set(j,copyCandidate(temp));
-                }
-            }
-        }*/
+        if(debug) System.out.println("Sorting Round!");
+        updateHashMap();
     }
-
-    private static Candidate copyCandidate(Candidate c){
-        return new Candidate(c);
-    }
-
 
 }

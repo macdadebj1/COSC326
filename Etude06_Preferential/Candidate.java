@@ -14,7 +14,7 @@ public class Candidate implements Comparable<Candidate>{
     }
 
     public String toString(){
-        return name +"\t"+votes;
+        return name +" "+votes;
     }
 
     @Override
