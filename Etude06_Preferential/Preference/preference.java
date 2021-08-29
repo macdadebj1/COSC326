@@ -57,7 +57,7 @@ public class preference{
         Collections.sort(currentCandidateArrayList);
         updateHashMap();
         saveRound();
-        //recursiveDepth++;
+        recursiveDepth++;
         if(debug) System.out.println("==========");
         //if(recursiveDepth >10) System.exit(1);
         System.out.println("Round " +recursiveDepth);
