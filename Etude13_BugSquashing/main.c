@@ -54,7 +54,7 @@ void helpMessage(char* programName){
     printf("    <First Name> <Last Name> <Email Address> <Phone Number>\n");
     printf("    When the program has loaded, you have six options to choose from:\n");
     printf("    '1' - Search Email.\n    '2' - Search First Name.\n    '3' - Search Last Name.\n    '4' - Search Phone Number.\n");
-    printf("    '9' - Display this message again.\n    '0' - Skip this record and advance to the next.\n");
+    printf("    '8' - Quit this program.\n    '9' - Display this message again.\n    '0' - Skip this record and advance to the next.\n");
     printf("    eg: %s users.txt\n",programName);
     printf("============================================================================================\n");
 }
@@ -205,7 +205,7 @@ int main(int argc, char** argv){
             fgets(buffer,sizeof buffer,stdin);
             command = atoi(buffer);
             if(command != 0){
-                if(command !=9){
+                if(command !=9 && command !=8){
                     printf("Please enter the data to search for:\n");
                     fgets(strBuffer,sizeof strBuffer,stdin);
                     fixfgetsInput(strBuffer,sizeof strBuffer);
@@ -251,6 +251,9 @@ int main(int argc, char** argv){
                     case 9:
                         helpMessage(argv[0]);
                         break;
+                    case 8:
+                        exit(0);
+                        break;    
                     default:
                         printf("Please enter a valid option!\n");
                         break;
