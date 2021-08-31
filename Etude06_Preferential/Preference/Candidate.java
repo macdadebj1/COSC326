@@ -34,7 +34,8 @@ public class Candidate implements Comparable<Candidate>{
         else if(c.votes < this.votes){
             return -1;
         }
-        return 0;
+        return this.name.compareTo(c.name); //If votes are the same, sort alphabetically...
+
     }
 
 }

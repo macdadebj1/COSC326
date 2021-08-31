@@ -59,9 +59,10 @@ public class preference{
         saveRound();
         recursiveDepth++;
         if(debug) System.out.println("==========");
-        //if(recursiveDepth >10) System.exit(1);
+        if(recursiveDepth >10) System.exit(1);
         System.out.println("Round " +recursiveDepth);
         printCurrentRound();
+        //System.out.println("size of voting pool: "+voterList.size());
         if(currentCandidateArrayList.get(0).votes > voterList.size()/2){
             System.out.println("Winner: "+ currentCandidateArrayList.get(0).name);
             return true;
@@ -82,9 +83,12 @@ public class preference{
                      System.out.println("Unbreakable tie");
                      System.exit(0);
                  }else{
+                     updateHashMap();
                      if(debug) System.out.println("found a loser! "+result);
                      int index = candidateLocation.get(result);
-                     if(debug) System.out.println("Bob's index is: " +index);
+                     if(debug)printCurrentRound();
+                     if(debug) System.out.println(result+"'s index is: " +index);
+
                      redistributeVotes(currentCandidateArrayList.get(index));
                  }
                  updateHashMap();
@@ -150,32 +154,94 @@ public class preference{
       * */
     private static void redistributeVotes(Candidate c){
         if(debug) System.out.println(c.name +" has " +c.votes+ " votes!");
+        if(debug)printBallot();
         for(int i = 0; i <voterList.size();i++){
             Voter v = voterList.get(i);
-            if(debug) System.out.println("searching for: "+c.name);
+            if(debug) System.out.println("searching for: "+c.name+" who still has "+c.votes+" votes!");
+            if(c.votes == 0) {
+                if(debug) System.out.println("Tried to go again but we have no more votes to distribute!");
+                break;
+            }
             if(debug) System.out.println("Searching voter: "+i+". They voted for: "+v.voteList.get(v.voteIndex));
             if(v.voteList.get(v.voteIndex).equals(c.name)){
                 v.voteIndex += 1;
                 c.votes--;
+                if(v.voteIndex >= v.voteList.size()){
+                    voterList.remove(i);
+                    i-=1;
+                    if(debug) System.out.println("Found a case where they didn't have anyone else to vote for!");
+
+                }
+                //if(debug) System.out.println("found candidate: "+v.voteList.get(v.voteIndex));
+                if(debug) System.out.println("This persons vote index is:" +v.voteIndex);
+                for(int j = v.voteIndex; j < v.voteList.size();j++){
+
+                    String tempCandidate = v.voteList.get(j);
+                    if(debug) System.out.println("found candidate: "+tempCandidate);
+                    if(addVote(tempCandidate,1)){
+                        if(debug) System.out.println("Successfully added the vote to "+tempCandidate);
+                        v.voteIndex = j;
+                        break;
+                    }else if(j == v.voteList.size()-1){
+                        voterList.remove(i);
+                        i-=1;
+                        if(debug) System.out.println("removed a voter! The new voter base is of size: "+voterList.size());
+                    }else{
+                        if(debug) System.out.println("Didn't find it at this index! continuing!");
+                        if(j >= v.voteList.size()-1){
+                            if(debug) System.out.println("We are at this voters last index and we didn't find anything! removing the voter! vote list size: "+voterList.size());
+                            voterList.remove(i);
+                            i-=1;
+                        }
+                    }
+                }
+
+                /*
                 if(v.voteList.size() > v.voteIndex) { //If they still have another next-best choice...
                     String tempCandidate = v.voteList.get(v.voteIndex);
-                    if (debug) System.out.println("added one vote to: " + tempCandidate);
+
                     if(!addVote(tempCandidate, 1)){
-                        i-=1; // if their next candidate has been removed... we give them another go...
+                        /*for(int j = v.voteIndex; j < v.voteList.size();j++){
+                            //if their next candidate has been removed... we give them another go...
+                            if(debug) System.out.println("we couln't find "+tempCandidate+" so we are searching again!");
+                            tempCandidate = v.voteList.get(j);
+                            if(addVote(tempCandidate,1)) {
+                                if(debug) System.out.println("We found someone to give the vote to! Its "+tempCandidate);
+                                v.voteIndex = j;
+                                break;
+                            }
+                        }
+
+                        if(debug) System.out.println("A voter had no more votes!... :( the new voting base size is: "+voterList.size());
+                        voterList.remove(i);
+                        i-=1;
+                        if(debug) System.out.println("Couldn't add a vote to "+tempCandidate+" the voterList size is: "+voterList.size());
+                        i-=1;
+
+                    }else{
+                        if (debug) System.out.println("added one vote to: " + tempCandidate);
                     }
                 }else{ //If they don't have another next-best choice...
                     voterList.remove(i); //TODO we are removing the voter from the voting pool if they don't have another option... may not want to do this..?
                     i-=1;
-                    if(debug) System.out.println("A Voter didn't have another option to choose, so they didn't vote...");
-                }
+                    if(debug) System.out.println("A Voter didn't have another option to choose, so they didn't vote... vote list size: "+voterList.size());
+                }*/
             }else{ //Theoretically will be called if someone's second choice is not longer active...
-                if(debug) System.out.println("didn't match!");
+                if(debug) System.out.println(v.voteList.get(v.voteIndex)+ " didn't match!");
             }
         }
         if(c.votes==0){
             if(debug) System.out.println("Removing a candidate from the pool!");
-            System.out.println("Eliminated: "+c.name+"\n");
-            currentCandidateArrayList.remove(currentCandidateArrayList.size()-1);
+            int index = candidateLocation.get(c.name);
+            if(debug) System.out.println("Trying to remove "+c.name+" their index is apparently: "+index);
+            //currentCandidateArrayList.remove(currentCandidateArrayList.size()-1);
+            Candidate check = currentCandidateArrayList.remove(index);
+            if(check.name.equals(c.name)){
+                System.out.println("Eliminated: "+c.name+"\n");
+            }
+            else{
+                if(debug) System.out.println("Didn't eliminate the right person! Meant to eliminate "+c.name+" instead removed "+check.name);
+            }
 
             doElection();
         } else{
