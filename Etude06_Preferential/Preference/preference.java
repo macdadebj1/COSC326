@@ -59,7 +59,7 @@ public class preference{
         saveRound();
         recursiveDepth++;
         if(debug) System.out.println("==========");
-        if(recursiveDepth >10) System.exit(1);
+        //if(recursiveDepth >10) System.exit(1);
         System.out.println("Round " +recursiveDepth);
         printCurrentRound();
         //System.out.println("size of voting pool: "+voterList.size());
@@ -340,15 +340,21 @@ public class preference{
      * Converts the voter array into an actual election. Adds candidates
      * */
     private static void readBallotInfo(){
+        int scoreToAdd = 1;
         for(int i = 0; i < voterList.size();i++) {
-            String name = voterList.get(i).voteList.get(0);
-            int index = findCandidate(name);
-            if (index > -1) {
-                currentCandidateArrayList.get(index).votes+=1;
-                //ballot.put(name, ballot.get(name) + 1);
-            } else {
-                currentCandidateArrayList.add(new Candidate(name,1));
+            for(int j = 0; j < voterList.get(i).voteList.size();j++){
+                if(j == 0) scoreToAdd = 1;
+                else if(j>0) scoreToAdd = 0;
+                String name = voterList.get(i).voteList.get(j);
+                int index = findCandidate(name);
+                if (index > -1) {
+                    currentCandidateArrayList.get(index).votes+=scoreToAdd;
+                    //ballot.put(name, ballot.get(name) + 1);
+                } else {
+                    currentCandidateArrayList.add(new Candidate(name,scoreToAdd));
+                }
             }
+
         }
     }
 
