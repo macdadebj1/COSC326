@@ -1,3 +1,5 @@
+package epidemic;
+
 import java.util.ArrayList;
 
 class Universe{
