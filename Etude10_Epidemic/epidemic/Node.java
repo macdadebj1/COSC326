@@ -2,11 +2,11 @@ package epidemic;
 
 public class Node{
 
-    Node left;
-    Node right;
-    Node above;
-    Node below;
-    NodeState state;
+    protected Node left;
+    protected Node right;
+    protected Node above;
+    protected Node below;
+    protected NodeState state;
 
     public Node(NodeState s){
         this.state = s;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class Universe{
 
-    ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
+    protected ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
 
     public Universe(){
     }
