@@ -19,6 +19,10 @@ class epidemic{
 
         readData();
         printUniverseList();
+        for(int i = 0; i <UniverseList.size();i++){
+            if(debug) System.out.println("Size: " +UniverseList.get(i).nodes.size());
+            findSteadyState(UniverseList.get(i));
+        }
 
     }
 
@@ -49,13 +53,28 @@ class epidemic{
         }
     }
 
+    private static Universe findSteadyState(Universe u){
+        if(debug) System.out.println("In find steady state!");
+        Universe localUniverse = new Universe(u);
+        printUniverse(localUniverse);
+        for(int i = 0; i < u.nodes.size();i++) {
+            for (int j = 0; j < u.nodes.get(i).size(); j++) {
+
+            }
+        }
+        return localUniverse;
+    }
+
     private static void linkNodes(Universe u){
         for(int i = 0; i < u.nodes.size();i++){
+            for(int j = 0; j < u.nodes.get(i).size();j++){
 
+            }
         }
     }
 
     private static void printUniverse(Universe u){
+        if(debug) System.out.println("In print universe!");
         for(int i = 0; i < u.nodes.size();i++){
             for(int j = 0; j < u.nodes.get(i).size();j++){
                 System.out.print(u.nodes.get(i).get(j));
