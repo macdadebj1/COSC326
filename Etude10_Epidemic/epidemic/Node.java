@@ -15,6 +15,14 @@ public class Node{
         this.state = NodeState.VULNERABLE;
     }
 
+    public Node(Node n){
+        this.left = n.left;
+        this.right = n.right;
+        this.above = n.above;
+        this.below = n.below;
+        this.state = n.state;
+    }
+
     public String toString(){
         if(state == NodeState.VULNERABLE) return ".";
         else if(state == NodeState.SICK) return "S";
