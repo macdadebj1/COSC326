@@ -29,4 +29,9 @@ public class Node{
         else if(state == NodeState.IMMUNE) return "I";
         else return"!";
     }
+
+    public void makeSick(){
+        if(epidemic.debug) System.out.println("I am now sick :(");
+        this.state = NodeState.SICK;
+    }
 }
