@@ -18,7 +18,7 @@ class epidemic{
         }
 
         readData();
-        printUniverseList();
+        //printUniverseList();
         for(int i = 0; i <UniverseList.size();i++){
             if(debug) System.out.println("Size: " +UniverseList.get(i).nodes.size());
             printUniverse(findSteadyState(UniverseList.get(i)));
@@ -58,7 +58,7 @@ class epidemic{
         Universe localUniverse = new Universe(u);
         boolean foundSolution = false;
         if(debug) System.out.println("Before:");
-        //printUniverse(localUniverse);
+        if(debug) printUniverse(localUniverse);
         int recursiveDepth = 0;
         int numberOfAlterationsThisPass;
         while(!foundSolution) {
@@ -84,7 +84,6 @@ class epidemic{
             }
         }
         if(debug) System.out.println("After:");
-        if(debug) printUniverse(localUniverse);
         return localUniverse;
     }
 
@@ -96,25 +95,25 @@ class epidemic{
         if(x<xSize-1){
             if(u.nodes.get(x+1).get(y).state == NodeState.SICK){
                 count += 1;
-                if(debug) System.out.println("Sick to the right!");
+                if(debug) System.out.println("Sick below!");
             }
         }
         if(x > 0){
             if(u.nodes.get(x-1).get(y).state == NodeState.SICK){
                 count += 1;
-                if(debug) System.out.println("Sick to the left!");
+                if(debug) System.out.println("Sick above!");
             }
         }
         if(y<ySize-1){
             if(u.nodes.get(x).get(y+1).state == NodeState.SICK){
                 count += 1;
-                if(debug) System.out.println("Sick below!");
+                if(debug) System.out.println("Sick to the right!");
             }
         }
         if(y > 0){
             if(u.nodes.get(x).get(y-1).state == NodeState.SICK){
                 count += 1;
-                if(debug) System.out.println("Sick above!");
+                if(debug) System.out.println("Sick to the left!");
             }
         }
         if(debug) System.out.println("Returning a count of: " +count);
@@ -138,6 +137,7 @@ class epidemic{
             }
             System.out.println("");
         }
+        System.out.println("");
     }
 
 
