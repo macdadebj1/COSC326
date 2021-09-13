@@ -21,7 +21,7 @@ class epidemic{
         printUniverseList();
         for(int i = 0; i <UniverseList.size();i++){
             if(debug) System.out.println("Size: " +UniverseList.get(i).nodes.size());
-            findSteadyState(UniverseList.get(i));
+            printUniverse(findSteadyState(UniverseList.get(i)));
         }
 
     }
@@ -56,15 +56,72 @@ class epidemic{
     private static Universe findSteadyState(Universe u){
         if(debug) System.out.println("In find steady state!");
         Universe localUniverse = new Universe(u);
-        printUniverse(localUniverse);
-        for(int i = 0; i < u.nodes.size();i++) {
-            for (int j = 0; j < u.nodes.get(i).size(); j++) {
-
+        boolean foundSolution = false;
+        if(debug) System.out.println("Before:");
+        //printUniverse(localUniverse);
+        int recursiveDepth = 0;
+        int numberOfAlterationsThisPass;
+        while(!foundSolution) {
+            if(debug) System.out.println("Doing another loop!");
+            numberOfAlterationsThisPass = 0;
+            //if(recursiveDepth >= 10) System.exit(0);
+            for (int i = 0; i < localUniverse.nodes.size(); i++) {
+                for (int j = 0; j < localUniverse.nodes.get(i).size(); j++) {
+                    if(localUniverse.nodes.get(i).get(j).state == NodeState.VULNERABLE){
+                        if(countSickNeighbours(i,j,localUniverse) >=2){
+                            localUniverse.nodes.get(i).get(j).makeSick();
+                            if(debug) System.out.println("This Node is now Sick!");
+                            //foundSolution = true;
+                            numberOfAlterationsThisPass += 1;
+                        }
+                    }
+                }
+            }
+            recursiveDepth++;
+            if(debug) System.out.println("Alterations this pass: "+numberOfAlterationsThisPass);
+            if(numberOfAlterationsThisPass == 0){
+                foundSolution = true;
             }
         }
+        if(debug) System.out.println("After:");
+        if(debug) printUniverse(localUniverse);
         return localUniverse;
     }
 
+    private static int countSickNeighbours(int x, int y, Universe u){
+        int xSize = u.nodes.size();
+        int ySize = u.nodes.get(0).size();
+        int count = 0;
+        if(debug) System.out.println("Counting sick neighbours! x: "+x+" y:"+y);
+        if(x<xSize-1){
+            if(u.nodes.get(x+1).get(y).state == NodeState.SICK){
+                count += 1;
+                if(debug) System.out.println("Sick to the right!");
+            }
+        }
+        if(x > 0){
+            if(u.nodes.get(x-1).get(y).state == NodeState.SICK){
+                count += 1;
+                if(debug) System.out.println("Sick to the left!");
+            }
+        }
+        if(y<ySize-1){
+            if(u.nodes.get(x).get(y+1).state == NodeState.SICK){
+                count += 1;
+                if(debug) System.out.println("Sick below!");
+            }
+        }
+        if(y > 0){
+            if(u.nodes.get(x).get(y-1).state == NodeState.SICK){
+                count += 1;
+                if(debug) System.out.println("Sick above!");
+            }
+        }
+        if(debug) System.out.println("Returning a count of: " +count);
+        return count;
+
+    }
+/*
     private static void linkNodes(Universe u){
         for(int i = 0; i < u.nodes.size();i++){
             for(int j = 0; j < u.nodes.get(i).size();j++){
@@ -72,7 +129,7 @@ class epidemic{
             }
         }
     }
-
+*/
     private static void printUniverse(Universe u){
         if(debug) System.out.println("In print universe!");
         for(int i = 0; i < u.nodes.size();i++){
